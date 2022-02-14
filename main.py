@@ -20,7 +20,6 @@ class MCSE(QMainWindow, Ui_MCSE):
         self.out_dir = 'NODIR'
         self.versions = []
         self.mc_dir_lineEdit.setReadOnly(True)
-        self.out_dir_lineEdit.setReadOnly(True)
 
         self.mc_dir_pushButton.clicked.connect(self.browse_mc_dir)
         self.out_dir_pushButton.clicked.connect(self.browse_out_dir)
@@ -30,17 +29,17 @@ class MCSE(QMainWindow, Ui_MCSE):
 
     def browse_mc_dir(self):
         self.mc_dir = QFileDialog.getExistingDirectory(self, 'Browse Minecraft directory', '')
-        self.mc_dir_lineEdit.setText(self.mc_dir)
         try:
             self.versions = os.listdir(f'{self.mc_dir}/assets/indexes')
         except Exception as e:
             self.statusBar.showMessage('Please browse your Minecraft directory!')
             self.statusBar.setStyleSheet("background-color : pink")
+            self.mc_dir = 'NODIR'
             return False
+        self.mc_dir_lineEdit.setText(self.mc_dir)
         for i in range(len(self.versions)):
             self.versions[i] = self.versions[i][:-5]
         self.ver_comboBox.addItems(self.versions)
-        self.mc_dir = 'NODIR'
 
     def browse_out_dir(self):
         self.out_dir = QFileDialog.getExistingDirectory(self, 'Browse output directory', '')
@@ -48,11 +47,11 @@ class MCSE(QMainWindow, Ui_MCSE):
 
     def check(self):
         if self.mc_dir == 'NODIR':
-            self.statusBar.showMessage('Please browse your Minecraft directory!')
+            self.statusBar.showMessage('Please browse your Minecraft directory!1')
             self.statusBar.setStyleSheet("background-color : pink")
             return False
         if not os.path.exists(self.mc_dir):
-            self.statusBar.showMessage('Please browse your Minecraft directory!')
+            self.statusBar.showMessage('Please browse your Minecraft directory!2')
             self.statusBar.setStyleSheet("background-color : pink")
             return False
         if self.out_dir == 'NODIR':
@@ -71,6 +70,7 @@ class MCSE(QMainWindow, Ui_MCSE):
 
     def extract(self):
         if self.check():
+            self.out_dir = self.out_dir_lineEdit.text()
             mc_assets = f'{self.mc_dir}/assets'
             mc_version = self.ver_comboBox.currentText() + '.json'
             out_path = self.out_dir
