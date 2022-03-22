@@ -1,4 +1,4 @@
-# MC_Sounds_Extractor
+# MC Sounds Extractor
 Minecraft Sounds Exctractor
 
 Requirements:
